@@ -7,16 +7,18 @@ import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:ecommerce_app/src/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 /// A widget that displays the list of products that match the search query.
-class ProductsGrid extends StatelessWidget {
+class ProductsGrid extends ConsumerWidget {
   const ProductsGrid({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // TODO: Read from data source
-    final products = FakeProductsRepository.instance.getProductList();
+    final productsRepository = ref.watch(productsRepositoryProvider);
+    final products = productsRepository.getProductList();
     return products.isEmpty
         ? Center(
             child: Text(
@@ -73,8 +75,10 @@ class ProductsLayoutGrid extends StatelessWidget {
       return LayoutGrid(
         columnSizes: columnSizes,
         rowSizes: rowSizes,
-        rowGap: Sizes.p24, // equivalent to mainAxisSpacing
-        columnGap: Sizes.p24, // equivalent to crossAxisSpacing
+        rowGap: Sizes.p24,
+        // equivalent to mainAxisSpacing
+        columnGap: Sizes.p24,
+        // equivalent to crossAxisSpacing
         children: [
           // render all the items with automatic child placement
           for (var i = 0; i < itemCount; i++) itemBuilder(context, i),
