@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:ecommerce_app/src/common_widgets/alert_dialogs.dart';
+import 'package:ecommerce_app/src/common_widgets/async_value_widget.dart';
 import 'package:ecommerce_app/src/common_widgets/custom_image.dart';
 import 'package:ecommerce_app/src/common_widgets/item_quantity_selector.dart';
 import 'package:ecommerce_app/src/common_widgets/responsive_two_column_layout.dart';
@@ -33,18 +34,20 @@ class ShoppingCartItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // TODO: Read from data source
-    final productsRepository = ref.watch(productsRepositoryProvider);
-    final product = productsRepository.getProduct(item.productId)!;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: Sizes.p8),
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(Sizes.p16),
-          child: ShoppingCartItemContents(
-            product: product,
-            item: item,
-            itemIndex: itemIndex,
-            isEditable: isEditable,
+    final productValue = ref.watch(productProvider(item.productId));
+    return AsyncValueWidget<Product?>(
+      value: productValue,
+      data: (product) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: Sizes.p8),
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(Sizes.p16),
+            child: ShoppingCartItemContents(
+              product: product!,
+              item: item,
+              itemIndex: itemIndex,
+              isEditable: isEditable,
+            ),
           ),
         ),
       ),
@@ -61,6 +64,7 @@ class ShoppingCartItemContents extends StatelessWidget {
     required this.itemIndex,
     required this.isEditable,
   });
+
   final Product product;
   final Item item;
   final int itemIndex;
@@ -85,7 +89,8 @@ class ShoppingCartItemContents extends StatelessWidget {
         children: [
           Text(product.title, style: Theme.of(context).textTheme.headlineSmall),
           gapH24,
-          Text(priceFormatted, style: Theme.of(context).textTheme.headlineSmall),
+          Text(priceFormatted,
+              style: Theme.of(context).textTheme.headlineSmall),
           gapH24,
           isEditable
               // show the quantity selector and a delete button

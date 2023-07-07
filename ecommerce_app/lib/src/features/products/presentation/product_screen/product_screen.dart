@@ -1,6 +1,6 @@
+import 'package:ecommerce_app/src/common_widgets/async_value_widget.dart';
 import 'package:ecommerce_app/src/common_widgets/custom_image.dart';
 import 'package:ecommerce_app/src/common_widgets/empty_placeholder_widget.dart';
-import 'package:ecommerce_app/src/common_widgets/error_message_widget.dart';
 import 'package:ecommerce_app/src/common_widgets/responsive_center.dart';
 import 'package:ecommerce_app/src/common_widgets/responsive_two_column_layout.dart';
 import 'package:ecommerce_app/src/constants/app_sizes.dart';
@@ -30,7 +30,8 @@ class ProductScreen extends StatelessWidget {
       body: Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) {
           final productValue = ref.watch(productProvider(productId));
-          return productValue.when(
+          return AsyncValueWidget<Product?>(
+            value: productValue,
             data: (product) => product == null
                 ? EmptyPlaceholderWidget(
                     message: 'Product not found'.hardcoded,
@@ -42,15 +43,7 @@ class ProductScreen extends StatelessWidget {
                         child: ProductDetails(product: product),
                       ),
                       ProductReviewsList(productId: productId),
-                    ],
-                  ),
-            error: (e, st) => Center(
-              child: ErrorMessageWidget(
-                e.toString(),
-              ),
-            ),
-            loading: () => const Center(
-              child: CircularProgressIndicator(),
+              ],
             ),
           );
         },
