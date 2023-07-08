@@ -18,13 +18,10 @@ class FakeProductsRepository {
   }
 
   Future<List<Product>> fetchProductsList() async {
-    await Future.delayed(const Duration(seconds: 2));
-    // throw Exception('Connection error!');
     return Future.value(_products);
   }
 
   Stream<List<Product>> watchProductsList() async* {
-    await Future.delayed(const Duration(seconds: 2));
     yield _products;
   }
 
@@ -52,8 +49,6 @@ final productsListFutureProvider =
 
 final productProvider =
     StreamProvider.autoDispose.family<Product?, String>((ref, id) {
-  // debugPrint('productProvider($id) is created!');
-  // ref.onDispose(() => debugPrint('productProvider($id) is disposed!'));
 
   final productsRepository = ref.watch(productsRepositoryProvider);
   return productsRepository.watchProduct(id);
