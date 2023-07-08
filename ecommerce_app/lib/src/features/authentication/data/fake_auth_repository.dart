@@ -24,7 +24,11 @@ class FakeAuthRepository {
 
   void dispose() => _authState.close();
 
-  Future<void> signOut() async {}
+  Future<void> signOut() async {
+    // await Future.delayed(const Duration(seconds: 3));
+    // throw Exception('Connection failed!');
+    _authState.value = null;
+  }
 
   void _createNewUser(String email) {
     _authState.value = AppUser(
@@ -36,7 +40,7 @@ class FakeAuthRepository {
 
 final authRepositoryProvider = Provider<FakeAuthRepository>((ref) {
   final auth = FakeAuthRepository();
-  auth.dispose();
+  // auth.dispose();
   return auth;
 });
 

@@ -15,6 +15,18 @@ class AccountScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<AsyncValue<void>>(
+      accountScreenControllerProvider,
+      (previous, next) {
+        if (next.hasError) {
+          showExceptionAlertDialog(
+            context: context,
+            title: 'Error'.hardcoded,
+            exception: next.error,
+          );
+        }
+      },
+    );
     final state = ref.watch(accountScreenControllerProvider);
     return Scaffold(
       appBar: AppBar(
@@ -41,7 +53,7 @@ class AccountScreen extends ConsumerWidget {
                       ref
                           .read(accountScreenControllerProvider.notifier)
                           .signOut();
-                      goRouter.pop();
+                      // goRouter.pop();
                     }
                   },
           ),

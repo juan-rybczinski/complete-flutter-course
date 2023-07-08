@@ -11,7 +11,7 @@ class AccountScreenController extends StateNotifier<AsyncValue<void>> {
   Future<void> signOut() async {
     try {
       state = const AsyncValue<void>.loading();
-      authRepository.signOut();
+      await authRepository.signOut();
       state = const AsyncValue<void>.data(null);
     } catch (e, st) {
       state = AsyncValue<void>.error(e, st);
