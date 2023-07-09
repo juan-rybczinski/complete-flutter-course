@@ -59,12 +59,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         // * disable swiping between pages
         physics: const NeverScrollableScrollPhysics(),
         controller: _controller,
-        children: [
+        children: const [
           EmailPasswordSignInContents(
             formType: EmailPasswordSignInFormType.register,
-            onSignedIn: _onSignedIn,
           ),
-          const PaymentPage()
+          PaymentPage()
         ],
       ),
     );
