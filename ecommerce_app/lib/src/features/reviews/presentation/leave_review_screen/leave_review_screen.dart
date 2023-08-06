@@ -84,7 +84,7 @@ class _LeaveReviewFormState extends ConsumerState<LeaveReviewForm> {
   @override
   Widget build(BuildContext context) {
     ref.listen<AsyncValue<void>>(leaveReviewControllerProvider,
-            (_, state) => state.showAlertDialogOnError(context));
+        (_, state) => state.showAlertDialogOnError(context));
 
     final state = ref.watch(leaveReviewControllerProvider);
     return Column(
@@ -121,8 +121,9 @@ class _LeaveReviewFormState extends ConsumerState<LeaveReviewForm> {
           onPressed: state.isLoading || _rating == 0
               ? null
               : () =>
-              ref.read(leaveReviewControllerProvider.notifier).submitReview(
-                productId: widget.productId,
+                  ref.read(leaveReviewControllerProvider.notifier).submitReview(
+                        previousReview: widget.review,
+                        productId: widget.productId,
                         rating: _rating,
                         comment: _controller.text,
                         onSuccess: context.pop,
