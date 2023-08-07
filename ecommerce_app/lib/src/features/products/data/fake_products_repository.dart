@@ -4,6 +4,7 @@ import 'package:ecommerce_app/src/constants/test_products.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:ecommerce_app/src/utils/delay.dart';
 import 'package:ecommerce_app/src/utils/in_memory_store.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FakeProductsRepository {
@@ -98,6 +99,16 @@ final productProvider =
 
 final productSearchProvider = FutureProvider.autoDispose
     .family<List<Product>, String>((ref, query) async {
+  final link = ref.keepAlive();
+  final timer = Timer(
+    const Duration(seconds: 5),
+    () => link.close(),
+  );
+  ref.onDispose(() {
+    timer.cancel();
+    debugPrint('Disposed: $query');
+  });
+
   final productsRepository = ref.watch(productsRepositoryProvider);
   return productsRepository.searchProducts(query);
 });
